@@ -1,0 +1,72 @@
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: powderblue;
+  color: #2d572c;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 60px; 
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 50px; 
+  width: 50px; 
+  margin-right: 10px;
+}
+
+.logo span {
+  font-size: 18px;
+  font-weight: bold;
+  color: black; 
+  white-space: nowrap; 
+}
+
+.heading {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.logout {
+  margin-right: 10px;
+}
+
+.logout-link {
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.logout-link:hover {
+  color: blue;
+}
+
+.complaint {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.complaint p {
+  margin-bottom: 10px;
+}
+
+.complaint .label {
+  font-weight: bold;
+  color: #333;
+}
+
+.complaint .value {
+  color: #555;
+}
