@@ -3,18 +3,19 @@ import { Link } from 'react-router-dom';
 import './Complaints.css';
 
 function LanComplaints() {
-  const [complaints, setComplaints] = useState( () => {
-    const storedComplaints = localStorage.getItem('lan');
-    return storedComplaints ? JSON.parse(storedComplaints) : [
-      { id: 1, problem: "Internet not working", priority: "Emergency", status: "Pending", cost: '', raeson: ''},
-      { id: 2, problem: "Network issue", priority: "Normal", status: "In Progress", cost: '', reason: ''},
-    ];
-  });
+  const [complaints, setComplaints] = useState([]);
 
-  useEffect( () => {
-    //API or axios
-    localStorage.setItem('lan', JSON.stringify(complaints));
-  }, [complaints]);
+  useEffect(() => {
+  fetch("http://localhost:5000/api/complaints")
+    .then(res => res.json())
+    .then(data => {
+      const lanComplaints = data.filter(
+        c => c.category === "Lan" && c.status !== "resolved"
+      );
+      setComplaints(lanComplaints);
+    })
+    .catch(err => console.error(err));
+}, []);
 
   return (
     <div>
@@ -33,13 +34,13 @@ function LanComplaints() {
       <div className="complaints-container">
         {complaints.length > 0 ? (
           complaints.map(complaint => (
-            <div key={complaint.id} className="complaint">
-              <p><span className="label">Problem:</span> {complaint.problem}</p>
+            <div key={complaint._id} className="complaint">
+              <p><span className="label">Problem:</span> {complaint.issueType}</p>
               <p><span className="label">Priority:</span> {complaint.priority}</p>
               <p><span className="label">Status:</span> {complaint.status}</p>
               {complaint.cost && (<p><span className="label">Cost:</span> {complaint.cost}</p>)}
               {complaint.reason && (<p><span className="label">Reason:</span> {complaint.reason}</p>)}
-              <Link to={`/update-complaint/lan/${complaint.id}`} className="update-link">Update Progress</Link>
+              <Link to={`/update-complaint/lan/${complaint._id}`} className="update-link">Update Progress</Link>
             </div>
            ))
          ) : (

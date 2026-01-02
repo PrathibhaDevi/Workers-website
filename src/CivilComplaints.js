@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 import './Complaints.css';
 
 function CivilComplaints() {
-  const [complaints, setComplaints] = useState( () => {
-    const storedComplaints = localStorage.getItem('civil');
-    return storedComplaints ? JSON.parse(storedComplaints) : [
-      { id: 1, problem: "Issue with the wall", priority: "Emergency", status: "Pending", cost: '', reason: '' },
-      { id: 2, problem: "Issue with the floor", priority: "Normal", status: "In Progress", cost: '', reason: ''  },
-    ];
-  });
+  const [complaints, setComplaints] = useState([]);
 
-  useEffect( () => {
-    //API or axios
-    localStorage.setItem('civil', JSON.stringify(complaints));
-  }, [complaints]);
-
+  useEffect(() => {
+  fetch("http://localhost:5000/api/complaints")
+    .then(res => res.json())
+    .then(data => {
+      const civilComplaints = data.filter(
+        c => c.category === "Civil" && c.status !== "resolved"
+      );
+      setComplaints(civilComplaints);
+    })
+    .catch(err => console.error(err));
+}, []);
   return (
     <div>
       <nav className="navbar">
@@ -33,13 +33,13 @@ function CivilComplaints() {
       <div className="complaints-container">
         {complaints.length > 0 ? (
           complaints.map(complaint => (
-            <div key={complaint.id} className="complaint">
-              <p><span className="label">Problem:</span> {complaint.problem}</p>
+            <div key={complaint._id} className="complaint">
+              <p><span className="label">Problem:</span> {complaint.issueType}</p>
               <p><span className="label">Priority:</span> {complaint.priority}</p>
               <p><span className="label">Status:</span> {complaint.status}</p>
               {complaint.cost && (<p><span className="label">Cost:</span> {complaint.cost}</p>)}
               {complaint.reason && (<p><span className="label">Reason:</span> {complaint.reason}</p>)}
-              <Link to={`/update-complaint/civil/${complaint.id}`} className="update-link">Update Progress</Link>
+              <Link to={`/update-complaint/civil/${complaint._id}`} className="update-link">Update Progress</Link>
             </div>
           ))
         ) : (
